@@ -17,17 +17,15 @@ namespace DSTA.VRNet.Discovery
         public event Action<IPAddress, DiscoveryMessage> OnServerFound;
 
         UdpClient _udp;
-        string _teamFilter;
         readonly ConcurrentQueue<(IPAddress address, DiscoveryMessage message)> _found = new();
 
         public void StartListening(int discoveryPort, string teamFilter)
         {
             StopListening();
-            _teamFilter = teamFilter;
             _udp = new UdpClient();
             _udp.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             _udp.Client.Bind(new IPEndPoint(IPAddress.Any, discoveryPort));
-            _ = ReceiveLoop(_udp);
+            _ = ReceiveLoop(_udp, teamFilter);
         }
 
         public void StopListening()
@@ -36,7 +34,7 @@ namespace DSTA.VRNet.Discovery
             _udp = null;
         }
 
-        async Task ReceiveLoop(UdpClient udp)
+        async Task ReceiveLoop(UdpClient udp, string teamFilter)
         {
             while (true)
             {
@@ -45,7 +43,7 @@ namespace DSTA.VRNet.Discovery
                 catch (ObjectDisposedException) { return; }
                 catch (SocketException) { return; }
 
-                if (DiscoveryMessage.TryParse(result.Buffer, out var message) && message.teamId == _teamFilter)
+                if (DiscoveryMessage.TryParse(result.Buffer, out var message) && message.teamId == teamFilter)
                     _found.Enqueue((result.RemoteEndPoint.Address, message));
             }
         }
