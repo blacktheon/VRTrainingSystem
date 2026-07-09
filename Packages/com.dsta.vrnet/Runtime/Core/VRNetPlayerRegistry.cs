@@ -66,5 +66,11 @@ namespace DSTA.VRNet.Core
 
         public bool TryGetByGuid(string playerGuid, out PlayerRecord record)
             => _byGuid.TryGetValue(playerGuid, out record);
+
+        public void Clear()
+        {
+            _byGuid.Clear();
+            _guidByClient.Clear();
+        }
     }
 }

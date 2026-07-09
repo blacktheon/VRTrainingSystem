@@ -34,6 +34,9 @@ namespace DSTA.VRNet.Core
         DiscoveryListener _listener;
         ReconnectController _reconnect;
         bool _callbacksHooked;
+        Coroutine _clientRoutine;
+        IPAddress _foundAddress;
+        DiscoveryMessage _foundMessage;
 
         void Awake()
         {
@@ -46,7 +49,14 @@ namespace DSTA.VRNet.Core
             PlayerName = SystemInfo.deviceName;
             _broadcaster = gameObject.AddComponent<DiscoveryBroadcaster>();
             _listener = gameObject.AddComponent<DiscoveryListener>();
+            _listener.OnServerFound += HandleServerFound;
             _reconnect = gameObject.AddComponent<ReconnectController>();
+        }
+
+        void HandleServerFound(IPAddress address, DiscoveryMessage message)
+        {
+            _foundAddress = address;
+            _foundMessage = message;
         }
 
         public static void SetLocalRig(Transform root, Transform head, Transform leftHand, Transform rightHand)
@@ -61,7 +71,11 @@ namespace DSTA.VRNet.Core
             ApplyTransportSettings(nm, listenAll: true);
             nm.NetworkConfig.ConnectionApproval = true;
             nm.ConnectionApprovalCallback = Approve;
-            nm.StartServer();
+            if (!nm.StartServer())
+            {
+                Status($"Failed to start server on port {_config.serverPort}");
+                return;
+            }
             _broadcaster.StartBroadcasting(
                 DiscoveryMessage.Create(_config.teamId, _config.serverName, _config.serverPort, _config.appVersion),
                 _config.discoveryPort, _config.discoveryIntervalSeconds);
@@ -116,7 +130,24 @@ namespace DSTA.VRNet.Core
 
         // ---------- Client ----------
 
-        public void StartClientAuto() => StartCoroutine(ClientAutoRoutine());
+        public void StartClientAuto()
+        {
+            CancelClientRoutine();
+            _clientRoutine = StartCoroutine(ClientAutoRoutine());
+        }
+
+        public void StartClient(string address, int port = -1)
+        {
+            CancelClientRoutine();
+            _clientRoutine = StartCoroutine(ClientConnectRoutine(address, port));
+        }
+
+        void CancelClientRoutine()
+        {
+            if (_clientRoutine != null) StopCoroutine(_clientRoutine);
+            _clientRoutine = null;
+            _listener.StopListening();
+        }
 
         IEnumerator ClientAutoRoutine()
         {
@@ -125,33 +156,36 @@ namespace DSTA.VRNet.Core
             while (nm.ShutdownInProgress) yield return null;
 
             Status($"Searching for {_config.teamId} server...");
-            IPAddress foundAddress = null;
-            DiscoveryMessage foundMessage = default;
-            Action<IPAddress, DiscoveryMessage> handler = (address, message) =>
-            {
-                foundAddress = address;
-                foundMessage = message;
-            };
-            _listener.OnServerFound += handler;
+            _foundAddress = null;
             _listener.StartListening(_config.discoveryPort, _config.teamId);
 
             float deadline = Time.realtimeSinceStartup + _config.discoveryTimeoutSeconds;
-            while (foundAddress == null && Time.realtimeSinceStartup < deadline)
+            while (_foundAddress == null && Time.realtimeSinceStartup < deadline)
                 yield return null;
 
-            _listener.OnServerFound -= handler;
             _listener.StopListening();
 
-            if (foundAddress == null)
+            if (_foundAddress == null)
             {
+                _clientRoutine = null;
                 Status("No server found. Check Wi-Fi/team ID, retry, or enter IP manually.");
                 OnDiscoveryTimeout?.Invoke();
                 yield break;
             }
-            StartClient(foundAddress.ToString(), foundMessage.port);
+            ConnectNow(_foundAddress.ToString(), _foundMessage.port);
+            _clientRoutine = null;
         }
 
-        public void StartClient(string address, int port = -1)
+        IEnumerator ClientConnectRoutine(string address, int port)
+        {
+            var nm = NetworkManager.Singleton;
+            if (nm.IsClient || nm.IsServer) nm.Shutdown();
+            while (nm.ShutdownInProgress) yield return null;
+            ConnectNow(address, port);
+            _clientRoutine = null;
+        }
+
+        void ConnectNow(string address, int port)
         {
             var nm = NetworkManager.Singleton;
             HookCallbacks(nm);
@@ -164,15 +198,21 @@ namespace DSTA.VRNet.Core
                 teamId = _config.teamId,
                 appVersion = _config.appVersion
             }.ToBytes();
-            nm.StartClient();
+            if (!nm.StartClient())
+            {
+                Status("Failed to start client connection");
+                return;
+            }
             Status($"Connecting to {address}...");
         }
 
         public void StopSession()
         {
             _reconnect.Enabled = false;
+            CancelClientRoutine();
+            StopAllCoroutines();
             _broadcaster.StopBroadcasting();
-            _listener.StopListening();
+            Registry.Clear();
             NetworkManager.Singleton.Shutdown();
             Status("Session stopped");
         }
