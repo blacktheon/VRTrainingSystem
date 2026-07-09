@@ -1,0 +1,9 @@
+{
+  "name": "DSTA.VRNet",
+  "rootNamespace": "DSTA.VRNet",
+  "references": [
+    "Unity.Netcode.Runtime",
+    "Unity.Netcode.Components"
+  ],
+  "autoReferenced": true
+}

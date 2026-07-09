@@ -1,0 +1,7 @@
+{
+  "name": "DSTA.VRNet.Editor",
+  "rootNamespace": "DSTA.VRNet.Editor",
+  "references": ["DSTA.VRNet"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}
