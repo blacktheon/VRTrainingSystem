@@ -1,3 +1,20 @@
+# Normalize line endings for text files
+* text=auto
+
+# Unity YAML/text assets
+*.cs text
+*.meta text
+*.unity text
+*.prefab text
+*.asset text
+*.mat text
+*.anim text
+*.controller text
+*.shader text
+*.json text
+*.md text
+
+# Git LFS
 *.dll filter=lfs diff=lfs merge=lfs -text
 *.so filter=lfs diff=lfs merge=lfs -text
 *.aar filter=lfs diff=lfs merge=lfs -text
