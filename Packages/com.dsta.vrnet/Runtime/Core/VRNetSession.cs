@@ -24,6 +24,14 @@ namespace DSTA.VRNet.Core
         public VRNetPlayerRegistry Registry { get; } = new();
         public string PlayerName { get; set; }
 
+        /// <summary>
+        /// Optional override for the persistent player identity. Leave null on devices
+        /// (PlayerIdentity supplies a per-device GUID). Needed when several instances
+        /// share one machine and PlayerPrefs store, e.g. Multiplayer Play Mode virtual
+        /// players, which would otherwise all present the same identity.
+        /// </summary>
+        public string PlayerGuidOverride { get; set; }
+
         public event Action<string> OnStatusChanged;
         public event Action OnConnected;
         public event Action OnDisconnected;
@@ -192,9 +200,14 @@ namespace DSTA.VRNet.Core
             HookCallbacks(nm);
             ApplyTransportSettings(nm, listenAll: false,
                 address: address, port: port > 0 ? port : _config.serverPort);
+            // Must match the server: NGO clients only serialize ConnectionData into the
+            // connection request when their own NetworkConfig.ConnectionApproval is true.
+            // Without this the approval-enabled server rejects every join with
+            // "Incomplete connection request message given config".
+            nm.NetworkConfig.ConnectionApproval = true;
             nm.NetworkConfig.ConnectionData = new ConnectionPayload
             {
-                playerGuid = PlayerIdentity.GetOrCreate(),
+                playerGuid = PlayerGuidOverride ?? PlayerIdentity.GetOrCreate(),
                 playerName = PlayerName,
                 teamId = _config.teamId,
                 appVersion = _config.appVersion
