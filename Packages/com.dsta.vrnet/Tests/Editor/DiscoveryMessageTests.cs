@@ -17,6 +17,7 @@ namespace DSTA.VRNet.Tests
             Assert.AreEqual("Tablet 1", parsed.serverName);
             Assert.AreEqual(7777, parsed.port);
             Assert.AreEqual("0.1.0", parsed.appVersion);
+            Assert.AreEqual(DiscoveryMessage.MagicValue, parsed.magic);
         }
 
         [Test]
@@ -40,6 +41,20 @@ namespace DSTA.VRNet.Tests
         {
             Assert.IsFalse(DiscoveryMessage.TryParse(null, out _));
             Assert.IsFalse(DiscoveryMessage.TryParse(new byte[0], out _));
+        }
+
+        [Test]
+        public void TryParse_InvalidPort_ReturnsFalse()
+        {
+            var msg = DiscoveryMessage.Create("TEAM-A", "x", 0, "0.1.0");
+            Assert.IsFalse(DiscoveryMessage.TryParse(msg.ToBytes(), out _));
+        }
+
+        [Test]
+        public void TryParse_EmptyTeamId_ReturnsFalse()
+        {
+            var msg = DiscoveryMessage.Create("", "x", 7777, "0.1.0");
+            Assert.IsFalse(DiscoveryMessage.TryParse(msg.ToBytes(), out _));
         }
     }
 }

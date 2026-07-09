@@ -36,16 +36,18 @@ namespace DSTA.VRNet.Discovery
         public static bool TryParse(byte[] data, out DiscoveryMessage message)
         {
             message = default;
-            if (data == null || data.Length == 0) return false;
+            if (data == null || data.Length == 0 || data.Length > 8192) return false;
             try
             {
                 message = JsonUtility.FromJson<DiscoveryMessage>(Encoding.UTF8.GetString(data));
             }
-            catch (Exception)
+            catch (ArgumentException)
             {
                 return false;
             }
-            return message.magic == MagicValue;
+            return message.magic == MagicValue
+                && message.port >= 1 && message.port <= 65535
+                && !string.IsNullOrEmpty(message.teamId);
         }
     }
 }
