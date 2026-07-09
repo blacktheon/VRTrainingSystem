@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59cdff80d8ba48c4ea3295d01dd87d33, type: 3}
+  m_Name: VRNetConfig
+  m_EditorClassIdentifier: DSTA.VRNet::DSTA.VRNet.Core.VRNetConfig
+  teamId: TEAM-A
+  serverName: VRNet Server
+  appVersion: 0.1.0
+  serverPort: 7777
+  discoveryPort: 47777
+  discoveryIntervalSeconds: 1
+  discoveryTimeoutSeconds: 6
+  disconnectTimeoutMs: 10000
+  connectTimeoutMs: 2000
+  maxConnectAttempts: 5
+  avatarDespawnGraceSeconds: 30
+  reconnectMaxBackoffSeconds: 10
