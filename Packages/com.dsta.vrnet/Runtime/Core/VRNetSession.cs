@@ -207,7 +207,7 @@ namespace DSTA.VRNet.Core
             nm.NetworkConfig.ConnectionApproval = true;
             nm.NetworkConfig.ConnectionData = new ConnectionPayload
             {
-                playerGuid = PlayerGuidOverride ?? PlayerIdentity.GetOrCreate(),
+                playerGuid = string.IsNullOrEmpty(PlayerGuidOverride) ? PlayerIdentity.GetOrCreate() : PlayerGuidOverride,
                 playerName = PlayerName,
                 teamId = _config.teamId,
                 appVersion = _config.appVersion
