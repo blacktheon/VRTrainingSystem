@@ -56,6 +56,21 @@ namespace DSTA.VRNet.Tests
         }
 
         [Test]
+        public void Disconnect_StaleClientIdAfterRejoin_DoesNotAffectRejoinedRecord()
+        {
+            var registry = new VRNetPlayerRegistry();
+            registry.RecordApproved(1, Payload());
+            // Client reconnects with a new clientId before the server notices the drop
+            registry.RecordApproved(2, Payload());
+            // The late disconnect for the OLD clientId now fires
+            var stale = registry.RecordDisconnected(1);
+
+            Assert.IsNull(stale);
+            Assert.IsTrue(registry.TryGetByClient(2, out var record));
+            Assert.IsTrue(record.Connected);
+        }
+
+        [Test]
         public void ConnectedPlayers_ExcludesDropped()
         {
             var registry = new VRNetPlayerRegistry();
