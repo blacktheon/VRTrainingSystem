@@ -2,7 +2,7 @@
   "name": "com.dsta.vrnet",
   "version": "0.1.0",
   "displayName": "VRNet Training Network",
-  "description": "Multiplayer networking library for VR training: dedicated tablet server, team-scoped LAN discovery, avatar sync, scenario control, session recording.",
+  "description": "Multiplayer networking library for VR training: dedicated tablet server, team-scoped LAN discovery, avatar sync, auto-reconnect. Scenario control and session recording on the roadmap.",
   "unity": "6000.0",
   "dependencies": {
     "com.unity.netcode.gameobjects": "2.4.0"

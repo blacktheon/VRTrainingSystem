@@ -238,6 +238,11 @@ namespace DSTA.VRNet.Core
         void ApplyTransportSettings(NetworkManager nm, bool listenAll, string address = null, int port = 0)
         {
             var transport = nm.GetComponent<UnityTransport>();
+            if (transport == null)
+            {
+                Debug.LogError("[VRNet] No UnityTransport on the NetworkManager. Add a Unity Transport component next to NetworkManager.");
+                return;
+            }
             transport.DisconnectTimeoutMS = _config.disconnectTimeoutMs;
             transport.ConnectTimeoutMS = _config.connectTimeoutMs;
             transport.MaxConnectAttempts = _config.maxConnectAttempts;

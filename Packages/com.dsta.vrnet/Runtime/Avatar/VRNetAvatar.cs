@@ -11,7 +11,7 @@ namespace DSTA.VRNet.Avatar
     /// </summary>
     public class VRNetAvatar : NetworkBehaviour
     {
-        public static readonly List<VRNetAvatar> All = new();
+        static readonly List<VRNetAvatar> All = new();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetStatics() => All.Clear();

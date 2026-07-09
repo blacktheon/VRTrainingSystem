@@ -7,7 +7,7 @@ namespace DSTA.VRNet.Avatar
     /// the game registers its XR rig transforms here (via VRNetSession.SetLocalRig)
     /// and the library's avatar mirrors them. The library never references game types.
     /// </summary>
-    public static class LocalRig
+    internal static class LocalRig
     {
         public static Transform Root { get; private set; }
         public static Transform Head { get; private set; }
