@@ -13,6 +13,9 @@ namespace DSTA.VRNet.Avatar
     {
         public static readonly List<VRNetAvatar> All = new();
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetStatics() => All.Clear();
+
         [SerializeField] Transform _head;
         [SerializeField] Transform _leftHand;
         [SerializeField] Transform _rightHand;
@@ -21,14 +24,15 @@ namespace DSTA.VRNet.Avatar
         public override void OnNetworkSpawn()
         {
             All.Add(this);
-            if (IsOwner)
+            if (IsOwner && _hiddenForOwner != null)
                 foreach (var renderer in _hiddenForOwner)
-                    renderer.enabled = false;
+                    if (renderer != null)
+                        renderer.enabled = false;
         }
 
         public override void OnNetworkDespawn() => All.Remove(this);
 
-        void Update()
+        void LateUpdate()
         {
             if (!IsOwner || !LocalRig.IsSet) return;
             transform.SetPositionAndRotation(LocalRig.Root.position, LocalRig.Root.rotation);
