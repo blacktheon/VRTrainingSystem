@@ -172,8 +172,9 @@ namespace DSTA.VRNet.Core
                 OnDiscoveryTimeout?.Invoke();
                 yield break;
             }
-            ConnectNow(_foundAddress.ToString(), _foundMessage.port);
             _clientRoutine = null;
+            if (!ConnectNow(_foundAddress.ToString(), _foundMessage.port))
+                OnDiscoveryTimeout?.Invoke();
         }
 
         IEnumerator ClientConnectRoutine(string address, int port)
@@ -185,7 +186,7 @@ namespace DSTA.VRNet.Core
             _clientRoutine = null;
         }
 
-        void ConnectNow(string address, int port)
+        bool ConnectNow(string address, int port)
         {
             var nm = NetworkManager.Singleton;
             HookCallbacks(nm);
@@ -201,9 +202,10 @@ namespace DSTA.VRNet.Core
             if (!nm.StartClient())
             {
                 Status("Failed to start client connection");
-                return;
+                return false;
             }
             Status($"Connecting to {address}...");
+            return true;
         }
 
         public void StopSession()
@@ -213,6 +215,7 @@ namespace DSTA.VRNet.Core
             StopAllCoroutines();
             _broadcaster.StopBroadcasting();
             Registry.Clear();
+            OnPlayersChanged?.Invoke();
             NetworkManager.Singleton.Shutdown();
             Status("Session stopped");
         }

@@ -30,6 +30,7 @@ namespace DSTA.VRNet.Discovery
 
         public void StopListening()
         {
+            while (_found.TryDequeue(out _)) { }
             _udp?.Close();
             _udp = null;
         }
