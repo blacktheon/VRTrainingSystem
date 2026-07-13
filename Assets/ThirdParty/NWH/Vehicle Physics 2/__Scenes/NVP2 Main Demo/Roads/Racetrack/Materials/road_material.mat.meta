@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b778ea50911410d488474b849f2c9a66
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 166252
+  packageName: NWH Vehicle Physics 2
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Vehicle Physics 2/__Scenes/NVP2 Main Demo/Roads/Racetrack/Materials/road_material.mat
+  uploadId: 762324
