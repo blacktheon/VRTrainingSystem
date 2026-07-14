@@ -6,7 +6,9 @@
 *.meta text
 *.unity text
 *.prefab text
-*.asset text
+# NOTE: *.asset must NOT be forced to text — TerrainData, baked meshes, and
+# other binary .asset files get corrupted by CRLF conversion on checkout.
+# `* text=auto` above already normalizes the YAML .asset files safely.
 *.mat text
 *.anim text
 *.controller text
