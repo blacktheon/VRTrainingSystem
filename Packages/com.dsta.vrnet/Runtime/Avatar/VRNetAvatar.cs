@@ -21,8 +21,14 @@ namespace DSTA.VRNet.Avatar
         [SerializeField] Transform _rightHand;
         [SerializeField] Renderer[] _hiddenForOwner;
 
+        // OwnerClientId reverts to the server when the owning client disconnects
+        // (DontDestroyWithOwner keeps the avatar alive), so stale-avatar lookup must
+        // key on the clientId the avatar was spawned for, not the current owner.
+        ulong _spawnOwnerClientId;
+
         public override void OnNetworkSpawn()
         {
+            _spawnOwnerClientId = OwnerClientId;
             All.Add(this);
             if (IsOwner && _hiddenForOwner != null)
                 foreach (var renderer in _hiddenForOwner)
@@ -41,7 +47,11 @@ namespace DSTA.VRNet.Avatar
             _rightHand.SetPositionAndRotation(LocalRig.RightHand.position, LocalRig.RightHand.rotation);
         }
 
+        /// <summary>
+        /// Finds the avatar spawned for <paramref name="clientId"/>, even after a
+        /// disconnect has reverted its live ownership to the server.
+        /// </summary>
         public static VRNetAvatar FindByOwner(ulong clientId)
-            => All.Find(a => a.OwnerClientId == clientId);
+            => All.Find(a => a._spawnOwnerClientId == clientId);
     }
 }
