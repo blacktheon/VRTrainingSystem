@@ -24,6 +24,7 @@ MonoBehaviour:
   - {fileID: 5846054902398818644}
   - {fileID: 4636274084881441160}
   - {fileID: 7037148958812927697}
+  - {fileID: -569912512823115791}
   - {fileID: -6633122298135914736}
   - {fileID: -560152689139244421}
   - {fileID: 8124339580780095115}
@@ -49,6 +50,7 @@ MonoBehaviour:
   - {fileID: -5149616944071561008}
   - {fileID: 6120613557581750023}
   - {fileID: 5174594401131320577}
+  - {fileID: -3430067294812229383}
   customLoaderName: 
   m_renderMode: 1
   m_latencyOptimization: 0
@@ -401,6 +403,28 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+--- !u!114 &-6563923951354889762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e314dfef9af0904e80129bcc0a79361, type: 3}
+  m_Name: HandTracking Android
+  m_EditorClassIdentifier: Unity.XR.Hands::UnityEngine.XR.Hands.OpenXR.HandTracking
+  m_enabled: 0
+  nameUi: Hand Tracking Subsystem
+  version: 0.0.1
+  featureIdInternal: com.unity.openxr.feature.input.handtracking
+  openxrExtensionStrings: XR_EXT_hand_tracking
+  company: Unity
+  priority: -100
+  targetOpenXRApiVersion: 
+  required: 0
+  customRuntimeLoaderName: 
 --- !u!114 &-6472848733550740147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,7 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e3cf747fae1be344b569049595fd510, type: 3}
   m_Name: VIVECosmosProfile Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.VIVECosmosProfile
-  m_enabled: 0
+  m_enabled: 1
   nameUi: VIVE Cosmos Controller Interaction
   version: 0.0.1
   featureIdInternal: vive.openxr.feature.cosmoscontroller
@@ -505,7 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe9ba5ccf170d54478c5df33f98aabc5, type: 3}
   m_Name: VIVEFocus3Profile Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.VIVEFocus3Profile
-  m_enabled: 0
+  m_enabled: 1
   nameUi: VIVE Focus 3 Controller Interaction
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.focus3controller
@@ -593,7 +617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 946578d91fd159a47b2ef0d5f4524fdb, type: 3}
   m_Name: ViveHandTracking Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Hand.ViveHandTracking
-  m_enabled: 0
+  m_enabled: 1
   nameUi: VIVE XR Hand Tracking
   version: 4.0.0
   featureIdInternal: vive.openxr.feature.hand.tracking
@@ -691,6 +715,28 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+--- !u!114 &-4680514033055527498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3aced3429e5911458f4da2dac9d0f29, type: 3}
+  m_Name: MetaHandTrackingAim Android
+  m_EditorClassIdentifier: Unity.XR.Hands::UnityEngine.XR.Hands.OpenXR.MetaHandTrackingAim
+  m_enabled: 0
+  nameUi: Meta Hand Tracking Aim
+  version: 0.0.1
+  featureIdInternal: com.unity.openxr.feature.input.metahandtrackingaim
+  openxrExtensionStrings: XR_FB_hand_tracking_aim
+  company: Unity
+  priority: 0
+  targetOpenXRApiVersion: 
+  required: 0
+  customRuntimeLoaderName: 
 --- !u!114 &-3775670710096894345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -715,6 +761,28 @@ MonoBehaviour:
   customRuntimeLoaderName: 
   cacheSize: 1048576
   perThreadCacheSize: 51200
+--- !u!114 &-3430067294812229383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e314dfef9af0904e80129bcc0a79361, type: 3}
+  m_Name: HandTracking Standalone
+  m_EditorClassIdentifier: Unity.XR.Hands::UnityEngine.XR.Hands.OpenXR.HandTracking
+  m_enabled: 0
+  nameUi: Hand Tracking Subsystem
+  version: 0.0.1
+  featureIdInternal: com.unity.openxr.feature.input.handtracking
+  openxrExtensionStrings: XR_EXT_hand_tracking
+  company: Unity
+  priority: -100
+  targetOpenXRApiVersion: 
+  required: 0
+  customRuntimeLoaderName: 
 --- !u!114 &-3337166684305013778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -990,6 +1058,28 @@ MonoBehaviour:
   required: 0
   customRuntimeLoaderName: 
   enablePersistedAnchor: 1
+--- !u!114 &-569912512823115791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3aced3429e5911458f4da2dac9d0f29, type: 3}
+  m_Name: MetaHandTrackingAim Standalone
+  m_EditorClassIdentifier: Unity.XR.Hands::UnityEngine.XR.Hands.OpenXR.MetaHandTrackingAim
+  m_enabled: 0
+  nameUi: Meta Hand Tracking Aim
+  version: 0.0.1
+  featureIdInternal: com.unity.openxr.feature.input.metahandtrackingaim
+  openxrExtensionStrings: XR_FB_hand_tracking_aim
+  company: Unity
+  priority: 0
+  targetOpenXRApiVersion: 
+  required: 0
+  customRuntimeLoaderName: 
 --- !u!114 &-560152689139244421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1246,7 +1336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 946578d91fd159a47b2ef0d5f4524fdb, type: 3}
   m_Name: ViveHandTracking Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Hand.ViveHandTracking
-  m_enabled: 0
+  m_enabled: 1
   nameUi: VIVE XR Hand Tracking
   version: 4.0.0
   featureIdInternal: vive.openxr.feature.hand.tracking
@@ -1837,7 +1927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5019471fb2174e5c852ecd4047163007, type: 3}
   m_Name: HandInteractionProfile Standalone
   m_EditorClassIdentifier: Unity.XR.OpenXR::UnityEngine.XR.OpenXR.Features.Interactions.HandInteractionProfile
-  m_enabled: 0
+  m_enabled: 1
   nameUi: Hand Interaction Profile
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.input.handinteraction
@@ -1914,6 +2004,7 @@ MonoBehaviour:
   - {fileID: 7941082148751093752}
   - {fileID: -4958725553387950292}
   - {fileID: -327684941885293512}
+  - {fileID: -4680514033055527498}
   - {fileID: 3277035825385037657}
   - {fileID: -7873904389257214564}
   - {fileID: -3337166684305013778}
@@ -1951,6 +2042,7 @@ MonoBehaviour:
   - {fileID: 769933873262532847}
   - {fileID: -2351719962019669167}
   - {fileID: 5632659759299820759}
+  - {fileID: -6563923951354889762}
   customLoaderName: 
   m_renderMode: 1
   m_latencyOptimization: 0
@@ -1978,7 +2070,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5019471fb2174e5c852ecd4047163007, type: 3}
   m_Name: HandInteractionProfile Android
   m_EditorClassIdentifier: Unity.XR.OpenXR::UnityEngine.XR.OpenXR.Features.Interactions.HandInteractionProfile
-  m_enabled: 0
+  m_enabled: 1
   nameUi: Hand Interaction Profile
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.input.handinteraction
