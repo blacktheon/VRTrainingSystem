@@ -8,6 +8,7 @@
 // conditions signed by you and all SDK and API requirements,
 // specifications, and documentation provided by HTC to You."
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,20 +16,18 @@ namespace VIVE.OpenXR.Samples
 {
     public class ActionAssetActivator : MonoBehaviour
     {
-        [SerializeField]
-        InputActionAsset m_ActionAsset;
-        public InputActionAsset actionAsset
-        {
-            get => m_ActionAsset;
-            set => m_ActionAsset = value;
-        }
+        [SerializeField] private List<InputActionAsset> m_ActionAssets;
 
         private void OnEnable()
         {
-            if (m_ActionAsset != null)
+            foreach (var actionAsset in m_ActionAssets)
             {
-                m_ActionAsset.Enable();
+                if (actionAsset != null)
+                {
+                    actionAsset.Enable();
+                }
             }
+            
         }
     }
 }
