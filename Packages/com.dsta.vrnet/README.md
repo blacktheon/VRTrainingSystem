@@ -26,12 +26,12 @@ Package Manager → Add package from git URL:
 
 - Clients auto-reconnect with backoff after the first successful connection; a dropped
   player's avatar freezes for a grace period (config) and their identity survives rejoin.
+  Direct-IP connections retain their address and port during retries; auto-join repeats
+  discovery. `StopSession()` cancels retries and raises `OnStopped` after cleanup.
 - Discovery and approval are team-scoped: a headset only finds and joins the server
   whose `teamId` matches its config. App version must match too.
-- The demo tablet UI writes the team ID typed at runtime into the shared `VRNetConfig`
-  asset instance; in the editor with domain reload disabled this persists between play
-  sessions. Deployment builds each carry their own config copy, so this only affects
-  editor testing.
+- `VRNetSession.Config` is a session-owned copy of the assigned `VRNetConfig`. The demo
+  tablet's team ID changes do not modify the source asset, including in the Editor.
 
 ## Deployment notes (Wi-Fi)
 

@@ -59,7 +59,7 @@ public class MppmRoleBootstrap : MonoBehaviour
         if (wrongTeam)
         {
             session.Config.teamId = WrongTeamId;
-            Debug.Log($"[MPPMTEST] role=CLIENT WRONGTEAM: teamId overridden to '{WrongTeamId}' (config asset mutated at runtime, restore after test)");
+            Debug.Log($"[MPPMTEST] role=CLIENT WRONGTEAM: runtime teamId overridden to '{WrongTeamId}'");
         }
         else
         {
@@ -84,7 +84,10 @@ public class MppmRoleBootstrap : MonoBehaviour
         listener.OnServerFound += (address, message) =>
             Debug.Log($"[MPPMTEST] discovery hit from {address} (team {message.teamId}, port {message.port})");
 
-        session.StartClientAuto();
+        // Discovery deliberately hides other teams. Connect directly to exercise
+        // approval rejection instead of merely timing out in discovery.
+        if (wrongTeam) session.StartClient("127.0.0.1");
+        else session.StartClientAuto();
 
         if (dropper)
         {

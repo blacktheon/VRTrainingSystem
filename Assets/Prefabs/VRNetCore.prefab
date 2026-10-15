@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4179329494470836782}
   - component: {fileID: 4090955244846665487}
   - component: {fileID: 1698609756035068540}
+  - component: {fileID: 8781597327649186944}
   m_Layer: 0
   m_Name: VRNetCore
   m_TagString: Untagged
@@ -61,7 +62,7 @@ MonoBehaviour:
     EnableTimeResync: 0
     TimeResyncInterval: 30
     EnsureNetworkVariableLengthSafety: 0
-    EnableSceneManagement: 1
+    EnableSceneManagement: 0
     ForceSamePrefabs: 1
     RecycleNetworkIds: 1
     NetworkIdRecycleDelay: 120
@@ -118,3 +119,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: DSTA.VRNet::DSTA.VRNet.Core.VRNetSession
   _config: {fileID: 11400000, guid: 1e60bfc20ae63b64aad090786188ac8d, type: 2}
+--- !u!114 &8781597327649186944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4473793640912586606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b62514cc2c005408d03bb653cad3ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DemoSessionStateSpawner
+  _statePrefab: {fileID: 8142866689725740723, guid: c092e485ddf88b747b81cb028c1008d6, type: 3}

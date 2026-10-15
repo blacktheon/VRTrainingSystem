@@ -1,0 +1,7 @@
+{
+  "name": "VRNet.Demo.Tests",
+  "references": ["DSTA.VRNet", "Unity.Netcode.Runtime", "Unity.Networking.Transport"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

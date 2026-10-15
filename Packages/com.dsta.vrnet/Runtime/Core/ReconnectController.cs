@@ -6,7 +6,7 @@ namespace DSTA.VRNet.Core
 {
     /// <summary>
     /// Client-side resilience: after a successful connection, any disconnect or failed
-    /// re-discovery triggers another StartClientAuto with exponential backoff. Enabled
+    /// attempt retries the chosen discovery or explicit endpoint with exponential backoff. Enabled
     /// on first successful connect; disabled by VRNetSession.StopSession().
     /// </summary>
     public class ReconnectController : MonoBehaviour
@@ -22,11 +22,19 @@ namespace DSTA.VRNet.Core
             _session = GetComponent<VRNetSession>();
             _session.OnConnected += () =>
             {
+                CancelRetry();
                 Enabled = true;
-                _backoffSeconds = 1f;
             };
             _session.OnDisconnected += ScheduleRetry;
             _session.OnDiscoveryTimeout += ScheduleRetry;
+        }
+
+        /// <summary>Discard retries from the previous connection attempt or session.</summary>
+        public void CancelRetry()
+        {
+            if (_pending != null) StopCoroutine(_pending);
+            _pending = null;
+            _backoffSeconds = 1f;
         }
 
         void ScheduleRetry()
@@ -41,7 +49,7 @@ namespace DSTA.VRNet.Core
             yield return new WaitForSeconds(_backoffSeconds);
             _backoffSeconds = Mathf.Min(_backoffSeconds * 2f, _session.Config.reconnectMaxBackoffSeconds);
             _pending = null;
-            if (Enabled) _session.StartClientAuto();
+            if (Enabled) _session.RetryClientConnection();
         }
     }
 }

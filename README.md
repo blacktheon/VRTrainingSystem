@@ -19,6 +19,49 @@ VRNet provides, per training team:
 
 Built on **Unity Netcode for GameObjects 2.x** over UnityTransport (UDP). LAN only.
 
+## Quest client + tablet sample
+
+The sample now uses the Quest XR environment installed from QuestBaseTemplate. The
+existing Meta Camera Rig is registered through `DemoRigBinder`; VRNet stays independent
+of Meta SDK types. Local hand visuals come from that rig; remote avatars synchronize
+the head and two hand transforms (not individual finger joints).
+
+1. Build **VRNet → Build Tablet Server APK**, install it on an ARM64 Android tablet,
+   and press **Start Server**. Keep tablet and clients on the same LAN and team ID.
+2. Open `Assets/Scenes/ClientDemoScene.unity` in the Editor, connect the Quest through
+   Quest Link with Meta set as the active OpenXR runtime, and press Play. The client
+   auto-discovers the tablet and retries if the tablet starts later. For a fixed IP,
+   set **ConnectUI → DemoClientUI → Server Address** before Play/build.
+3. Connect a second client. The tablet roster shows connected/disconnected users.
+   **Overview** frames the group; **Follow Next Trainee** cycles users. Drag the view
+   to orbit and pinch (or mouse wheel) to zoom. The roster scrolls independently.
+4. Press **Switch to Night / Switch to Day**. Lighting updates on all clients and the
+   tablet. Late joiners and returning clients receive the current state. Stopping and
+   starting a new session resets it to day.
+5. Build **VRNet → Build Headset Client APK** for standalone Quest testing.
+
+Use the VRNet build menus with Android selected. They produce separate APKs and app IDs
+(`com.immrsiv.vrnet.server` / `com.immrsiv.vrnet.client`). Tablet builds disable XR and
+remove headset-only manifest requirements; the original Quest settings are restored
+after success or failure. Do not use a normal Quest-configured Build button for the tablet.
+
+The demo disables NGO scene management because each role has a different entry scene.
+`VRNetCore`, the avatar, and `DemoSessionState` use the same registered network prefabs
+in both builds. Day/night is a small demo of persistent server-owned state, not the
+generic scenario framework described in the roadmap.
+
+The **EditMode** Test Runner includes package tests, manifest/build-setting regressions,
+and `DemoNetworkIntegrationTests`, which temporarily enters Play Mode for real UDP
+loopback clients. Save scenes first; the test restores the open scenes and XR startup
+settings. Results are saved to `Logs/vrnet-all-results.xml`. Verify Quest tracking,
+touch input, LAN discovery, and Wi-Fi recovery on physical devices before release.
+
+Validated on 2026-10-16: **38 tests passed**, including two-client UDP loopback,
+late join/reconnect, pose and lighting sync, build isolation, and camera framing.
+Both APK build menus completed with zero build errors, and the packaged manifests
+were inspected. Existing imported SDK/sample warnings remain. Physical-device
+tracking, touch, and Wi-Fi tests are still required.
+
 ## Repository layout
 
 ```
@@ -33,7 +76,7 @@ VRTrainingSystem/
 │   ├── Editor/                         editor-only helpers
 │   └── Tests/Editor/                   EditMode unit tests
 ├── Assets/                           ← THE DEMO (reference integration, not shipped)
-│   ├── Scenes/ClientDemoScene.unity    VR headset scene (XRI + VIVE OpenXR)
+│   ├── Scenes/ClientDemoScene.unity    VR headset scene (Meta Quest)
 │   ├── Scenes/ServerDemoScene.unity    tablet server scene (flat UI)
 │   ├── Scenes/MppmTestScene.unity      in-editor integration test scene
 │   ├── Prefabs/VRNetCore.prefab        NetworkManager + UnityTransport + VRNetSession
@@ -49,8 +92,8 @@ VRTrainingSystem/
 |---|---|
 | Unity | **6000.3.19f1** (URP), with **Android Build Support** (SDK/NDK/OpenJDK) |
 | Netcode for GameObjects | 2.4.0 (package dependency) |
-| Headsets | VIVE Focus Vision (Android), via VIVE OpenXR plugin |
-| Server device | any Android tablet |
+| Headsets | Meta Quest (Android), or Quest Link for Editor testing |
+| Server device | ARM64 Android tablet, Android 8.0/API 26 or later, OpenGL ES 3 |
 | Testing without hardware | Multiplayer Play Mode package (already installed) |
 
 ---
@@ -124,14 +167,15 @@ VRNetSession.Instance.StartClient("10.0.0.5"); // headset: manual IP fallback
 | `StartClient(address, port = -1)` | Connect directly; `-1` = config's `serverPort` |
 | `StopSession()` | Tear everything down (also disables auto-reconnect) |
 | `SetLocalRig(root, head, left, right)` | Register the XR rig (static) |
-| `Config` | The assigned `VRNetConfig` |
+| `Config` | A session-owned runtime copy of the assigned `VRNetConfig` |
 | `Registry` | Server-side roster (`ConnectedPlayers` / `AllPlayers`) |
 | `PlayerName` | Defaults to device name; set before connecting to customize |
 | `PlayerGuidOverride` | Leave null on devices. Only for multiple instances sharing one machine's PlayerPrefs (e.g. Multiplayer Play Mode) |
 
 Events: `OnStatusChanged(string)` (human-readable status line — wire it to a UI text),
-`OnConnected`, `OnDisconnected`, `OnDiscoveryTimeout`, `OnPlayersChanged` (roster changed;
-server side).
+`OnConnected`, `OnDisconnected`, `OnDiscoveryTimeout`, `OnStopped` (explicit stop after
+cleanup), `OnPlayersChanged` (roster changed; server side). Automatic reconnect retains
+the selected direct IP/port, or repeats discovery when auto-join was selected.
 
 ### `VRNetConfig` fields
 
@@ -144,7 +188,7 @@ server side).
 ### Behavior you get for free
 
 - **Auto-reconnect:** after the *first* successful connection, any disconnect or discovery
-  timeout triggers re-discovery with exponential backoff (1 s → doubling → capped). Disabled
+  timeout retries the selected connection method with exponential backoff (1 s → doubling → capped). Disabled
   by `StopSession()`.
 - **Rejoin identity:** each device stores a persistent GUID. The server recognizes a
   returning GUID, despawns the stale frozen avatar, and re-associates the same
@@ -187,9 +231,9 @@ becomes a client**. Two MPPM player *tags* trigger scripted misbehavior:
 | `DROPPER` | Self-disconnects after 12 s → must auto-reconnect and rejoin as the same identity |
 
 Watch the Console for `[MPPMTEST]` lines (roster snapshots, discovery hits, events).
-Note: a `WRONGTEAM` run mutates the shared config asset's `teamId` at runtime — with domain
-reload disabled this can persist in the editor; check `Assets/Settings/VRNetConfig.asset`
-says `TEAM-A` afterwards.
+The `WRONGTEAM` client uses direct loopback to exercise approval rejection; discovery
+would otherwise filter the mismatched server out. Runtime team changes affect only
+the session's config copy, not `Assets/Settings/VRNetConfig.asset`.
 
 **3. On-hardware (before any release).** See "Build & smoke test" below.
 
@@ -201,19 +245,19 @@ One project builds both APKs — same Android target, different entry scene — 
 - **VRNet → Build Headset Client APK** → `Builds/VRNet-HeadsetClient.apk`
 - **VRNet → Build Tablet Server APK** → `Builds/VRNet-TabletServer.apk`
 
-Install with `adb install -r <apk>` (headsets need Developer Mode via the VIVE Manager
-app). Then, with the tablet and headsets on the same Wi-Fi:
+Install with `adb install -r <apk>` (Quest needs Developer Mode and USB debugging
+authorized). Then, with the tablet and headsets on the same Wi-Fi:
 
-1. Tablet: start server (`TEAM-A`). Status line confirms; OpenXR init failure on the
-   tablet is expected noise — it continues as a flat app.
-2. Headset: **Join Auto** → connected within ~6 s, roster shows the player.
+1. Tablet: start server (`TEAM-A`). Status line confirms; the app runs without XR.
+2. Headset: automatic discovery connects; roster shows the player.
 3. Second headset: both trainees see each other's head/hands moving smoothly.
 4. **The resilience test:** kill one headset's Wi-Fi mid-session. Expect: roster flips to
    `DROPPED` in ~10 s, avatar freezes for others. Restore Wi-Fi: auto-reconnect, same
    identity back, avatar unfreezes. This is the core promise — always test it.
 5. Team isolation: a second server with a different team ID on the same LAN must be
    invisible to `TEAM-A` headsets.
-6. Manual IP entry connects when broadcast is blocked (router AP isolation).
+6. Set the client's **Server Address** in the Inspector to test direct-IP connection
+   when broadcast is filtered but traffic between devices is allowed.
 
 ## Release a new version
 
@@ -249,7 +293,7 @@ Hands-on exercises, in order. Each teaches one concept; 1–4 need no hardware.
 3. Read [`ConnectionValidator.cs`](Packages/com.dsta.vrnet/Runtime/Core/ConnectionValidator.cs)
    (it's tiny) to see exactly what's checked: team ID and app version, carried in the
    connection payload.
-4. Restore `teamId: TEAM-A` in `Assets/Settings/VRNetConfig.asset` if the run mutated it.
+4. Confirm the source config still says `TEAM-A`; the test changes only its runtime copy.
 
 ### Scenario 3 — "Pull the plug" (15 min, editor only)
 
@@ -295,9 +339,11 @@ Hands-on exercises, in order. Each teaches one concept; 1–4 need no hardware.
 
 *Goal: practice the fallbacks you'll need on site.*
 
-1. Enable AP/client isolation on the test router (or use a guest network that blocks
-   broadcast). Auto-join now times out — read the status message trail.
-2. Recover with manual IP entry from the demo client UI.
+1. Use a test network that filters UDP broadcast while permitting traffic between
+   devices. Auto-join now times out — read the status message trail.
+2. Set **ConnectUI → DemoClientUI → Server Address** in the Inspector, then replay
+   or rebuild the client. Full AP/client isolation must be disabled on the router;
+   a direct IP cannot bypass a block on traffic between devices.
 3. Read the Wi-Fi planning notes in the
    [package README](Packages/com.dsta.vrnet/README.md): one 5 GHz SSID per team on
    non-overlapping channels. The library survives interference; it cannot remove it.

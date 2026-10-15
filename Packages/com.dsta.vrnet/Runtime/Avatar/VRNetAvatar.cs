@@ -21,6 +21,10 @@ namespace DSTA.VRNet.Avatar
         [SerializeField] Transform _rightHand;
         [SerializeField] Renderer[] _hiddenForOwner;
 
+        public Transform Head => _head;
+        public Transform LeftHand => _leftHand;
+        public Transform RightHand => _rightHand;
+
         // OwnerClientId reverts to the server when the owning client disconnects
         // (DontDestroyWithOwner keeps the avatar alive), so stale-avatar lookup must
         // key on the clientId the avatar was spawned for, not the current owner.
@@ -40,7 +44,9 @@ namespace DSTA.VRNet.Avatar
 
         void LateUpdate()
         {
-            if (!IsOwner || !LocalRig.IsSet) return;
+            // A dedicated server can inherit ownership of a disconnected client's
+            // avatar. Only its original, connected client may drive a local pose.
+            if (!IsSpawned || !IsClient || !IsOwner || OwnerClientId != _spawnOwnerClientId || !LocalRig.IsSet) return;
             transform.SetPositionAndRotation(LocalRig.Root.position, LocalRig.Root.rotation);
             _head.SetPositionAndRotation(LocalRig.Head.position, LocalRig.Head.rotation);
             _leftHand.SetPositionAndRotation(LocalRig.LeftHand.position, LocalRig.LeftHand.rotation);

@@ -20,9 +20,26 @@ namespace DSTA.VRNet.Core
 
         [SerializeField] VRNetConfig _config;
 
-        public VRNetConfig Config => _config;
+        VRNetConfig _runtimeConfig;
+
+        /// <summary>Session-owned settings. Editing these never changes the assigned asset.</summary>
+        public VRNetConfig Config
+        {
+            get
+            {
+                if (_runtimeConfig == null)
+                {
+                    _runtimeConfig = _config != null ? Instantiate(_config) : ScriptableObject.CreateInstance<VRNetConfig>();
+                    _runtimeConfig.hideFlags = HideFlags.DontSave;
+                }
+                return _runtimeConfig;
+            }
+        }
+
         public VRNetPlayerRegistry Registry { get; } = new();
         public string PlayerName { get; set; }
+        public bool IsServerRunning => _networkManager != null && _networkManager.IsServer && !_networkManager.ShutdownInProgress;
+        public bool IsClientConnected => _networkManager != null && _networkManager.IsConnectedClient && !_networkManager.ShutdownInProgress;
 
         /// <summary>
         /// Optional override for the persistent player identity. Leave null on devices
@@ -35,16 +52,20 @@ namespace DSTA.VRNet.Core
         public event Action<string> OnStatusChanged;
         public event Action OnConnected;
         public event Action OnDisconnected;
+        public event Action OnStopped;
         public event Action OnDiscoveryTimeout;
         public event Action OnPlayersChanged;
 
         DiscoveryBroadcaster _broadcaster;
         DiscoveryListener _listener;
         ReconnectController _reconnect;
-        bool _callbacksHooked;
+        NetworkManager _networkManager;
         Coroutine _clientRoutine;
         IPAddress _foundAddress;
         DiscoveryMessage _foundMessage;
+        bool _useDiscovery = true;
+        string _clientAddress;
+        int _clientPort = -1;
 
         void Awake()
         {
@@ -61,6 +82,23 @@ namespace DSTA.VRNet.Core
             _reconnect = gameObject.AddComponent<ReconnectController>();
         }
 
+        void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                CleanupSession();
+                if (_listener != null) _listener.OnServerFound -= HandleServerFound;
+                LocalRig.Clear();
+                Instance = null;
+            }
+            if (_runtimeConfig != null)
+            {
+                if (Application.isPlaying) Destroy(_runtimeConfig);
+                else DestroyImmediate(_runtimeConfig);
+                _runtimeConfig = null;
+            }
+        }
+
         void HandleServerFound(IPAddress address, DiscoveryMessage message)
         {
             _foundAddress = address;
@@ -75,24 +113,31 @@ namespace DSTA.VRNet.Core
         public void StartServer()
         {
             var nm = NetworkManager.Singleton;
+            if (!CanStart(nm)) return;
+            CancelClientRoutine();
             HookCallbacks(nm);
-            ApplyTransportSettings(nm, listenAll: true);
+            if (!ApplyTransportSettings(nm, listenAll: true))
+            {
+                UnhookCallbacks();
+                return;
+            }
             nm.NetworkConfig.ConnectionApproval = true;
             nm.ConnectionApprovalCallback = Approve;
             if (!nm.StartServer())
             {
-                Status($"Failed to start server on port {_config.serverPort}");
+                UnhookCallbacks();
+                Status($"Failed to start server on port {Config.serverPort}");
                 return;
             }
             _broadcaster.StartBroadcasting(
-                DiscoveryMessage.Create(_config.teamId, _config.serverName, _config.serverPort, _config.appVersion),
-                _config.discoveryPort, _config.discoveryIntervalSeconds);
-            Status($"Server '{_config.serverName}' up for {_config.teamId} on port {_config.serverPort}");
+                DiscoveryMessage.Create(Config.teamId, Config.serverName, Config.serverPort, Config.appVersion),
+                Config.discoveryPort, Config.discoveryIntervalSeconds);
+            Status($"Server '{Config.serverName}' up for {Config.teamId} on port {Config.serverPort}");
         }
 
         void Approve(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
-            var result = ConnectionValidator.Validate(request.Payload, _config.teamId, _config.appVersion);
+            var result = ConnectionValidator.Validate(request.Payload, Config.teamId, Config.appVersion);
             response.Approved = result.Approved;
             response.Reason = result.Reason;
             response.CreatePlayerObject = result.Approved;
@@ -121,13 +166,13 @@ namespace DSTA.VRNet.Core
             var record = Registry.RecordDisconnected(clientId);
             OnPlayersChanged?.Invoke();
             if (record == null) return;
-            Status($"{record.PlayerName} lost connection (grace {_config.avatarDespawnGraceSeconds}s)");
+            Status($"{record.PlayerName} lost connection (grace {Config.avatarDespawnGraceSeconds}s)");
             StartCoroutine(DespawnAfterGrace(clientId, record.PlayerGuid));
         }
 
         IEnumerator DespawnAfterGrace(ulong clientId, string playerGuid)
         {
-            yield return new WaitForSeconds(_config.avatarDespawnGraceSeconds);
+            yield return new WaitForSeconds(Config.avatarDespawnGraceSeconds);
             if (Registry.TryGetByGuid(playerGuid, out var record) && record.Connected)
                 yield break; // rejoined during grace; stale avatar was already despawned in Approve
 
@@ -140,34 +185,50 @@ namespace DSTA.VRNet.Core
 
         public void StartClientAuto()
         {
+            _useDiscovery = true;
             CancelClientRoutine();
             _clientRoutine = StartCoroutine(ClientAutoRoutine());
         }
 
         public void StartClient(string address, int port = -1)
         {
+            _useDiscovery = false;
+            _clientAddress = address;
+            _clientPort = port > 0 ? port : Config.serverPort;
             CancelClientRoutine();
             _clientRoutine = StartCoroutine(ClientConnectRoutine(address, port));
+        }
+
+        internal void RetryClientConnection()
+        {
+            if (_useDiscovery) StartClientAuto();
+            else StartClient(_clientAddress, _clientPort);
         }
 
         void CancelClientRoutine()
         {
             if (_clientRoutine != null) StopCoroutine(_clientRoutine);
             _clientRoutine = null;
-            _listener.StopListening();
+            if (_listener != null) _listener.StopListening();
         }
 
         IEnumerator ClientAutoRoutine()
         {
             var nm = NetworkManager.Singleton;
+            if (nm == null)
+            {
+                Status("No NetworkManager is available");
+                yield break;
+            }
+            UnhookCallbacks();
             if (nm.IsClient || nm.IsServer) nm.Shutdown();
             while (nm.ShutdownInProgress) yield return null;
 
-            Status($"Searching for {_config.teamId} server...");
+            Status($"Searching for {Config.teamId} server...");
             _foundAddress = null;
-            _listener.StartListening(_config.discoveryPort, _config.teamId);
+            _listener.StartListening(Config.discoveryPort, Config.teamId);
 
-            float deadline = Time.realtimeSinceStartup + _config.discoveryTimeoutSeconds;
+            float deadline = Time.realtimeSinceStartup + Config.discoveryTimeoutSeconds;
             while (_foundAddress == null && Time.realtimeSinceStartup < deadline)
                 yield return null;
 
@@ -188,6 +249,12 @@ namespace DSTA.VRNet.Core
         IEnumerator ClientConnectRoutine(string address, int port)
         {
             var nm = NetworkManager.Singleton;
+            if (nm == null)
+            {
+                Status("No NetworkManager is available");
+                yield break;
+            }
+            UnhookCallbacks();
             if (nm.IsClient || nm.IsServer) nm.Shutdown();
             while (nm.ShutdownInProgress) yield return null;
             ConnectNow(address, port);
@@ -197,9 +264,14 @@ namespace DSTA.VRNet.Core
         bool ConnectNow(string address, int port)
         {
             var nm = NetworkManager.Singleton;
+            if (!CanStart(nm)) return false;
             HookCallbacks(nm);
-            ApplyTransportSettings(nm, listenAll: false,
-                address: address, port: port > 0 ? port : _config.serverPort);
+            if (!ApplyTransportSettings(nm, listenAll: false,
+                address: address, port: port > 0 ? port : Config.serverPort))
+            {
+                UnhookCallbacks();
+                return false;
+            }
             // Must match the server: NGO clients only serialize ConnectionData into the
             // connection request when their own NetworkConfig.ConnectionApproval is true.
             // Without this the approval-enabled server rejects every join with
@@ -209,11 +281,12 @@ namespace DSTA.VRNet.Core
             {
                 playerGuid = string.IsNullOrEmpty(PlayerGuidOverride) ? PlayerIdentity.GetOrCreate() : PlayerGuidOverride,
                 playerName = PlayerName,
-                teamId = _config.teamId,
-                appVersion = _config.appVersion
+                teamId = Config.teamId,
+                appVersion = Config.appVersion
             }.ToBytes();
             if (!nm.StartClient())
             {
+                UnhookCallbacks();
                 Status("Failed to start client connection");
                 return false;
             }
@@ -223,65 +296,113 @@ namespace DSTA.VRNet.Core
 
         public void StopSession()
         {
-            _reconnect.Enabled = false;
+            CleanupSession();
+            OnStopped?.Invoke();
+            OnPlayersChanged?.Invoke();
+            Status("Session stopped");
+        }
+
+        void CleanupSession()
+        {
+            if (_reconnect != null)
+            {
+                _reconnect.Enabled = false;
+                _reconnect.CancelRetry();
+            }
             CancelClientRoutine();
             StopAllCoroutines();
-            _broadcaster.StopBroadcasting();
+            if (_broadcaster != null) _broadcaster.StopBroadcasting();
+            _foundAddress = null;
+            var nm = _networkManager;
+            UnhookCallbacks();
             Registry.Clear();
-            OnPlayersChanged?.Invoke();
-            NetworkManager.Singleton.Shutdown();
-            Status("Session stopped");
+            if (nm != null) nm.Shutdown();
         }
 
         // ---------- Shared ----------
 
-        void ApplyTransportSettings(NetworkManager nm, bool listenAll, string address = null, int port = 0)
+        bool CanStart(NetworkManager nm)
+        {
+            if (nm == null)
+            {
+                Status("No NetworkManager is available");
+                return false;
+            }
+            if (nm.ShutdownInProgress || nm.IsClient || nm.IsServer)
+            {
+                Status("Wait for the current session to stop before starting another");
+                return false;
+            }
+            return true;
+        }
+
+        bool ApplyTransportSettings(NetworkManager nm, bool listenAll, string address = null, int port = 0)
         {
             var transport = nm.GetComponent<UnityTransport>();
             if (transport == null)
             {
                 Debug.LogError("[VRNet] No UnityTransport on the NetworkManager. Add a Unity Transport component next to NetworkManager.");
-                return;
+                return false;
             }
-            transport.DisconnectTimeoutMS = _config.disconnectTimeoutMs;
-            transport.ConnectTimeoutMS = _config.connectTimeoutMs;
-            transport.MaxConnectAttempts = _config.maxConnectAttempts;
+            transport.DisconnectTimeoutMS = Config.disconnectTimeoutMs;
+            transport.ConnectTimeoutMS = Config.connectTimeoutMs;
+            transport.MaxConnectAttempts = Config.maxConnectAttempts;
             if (listenAll)
-                transport.SetConnectionData("0.0.0.0", (ushort)_config.serverPort, "0.0.0.0");
+                transport.SetConnectionData("0.0.0.0", (ushort)Config.serverPort, "0.0.0.0");
             else
                 transport.SetConnectionData(address, (ushort)port);
+            return true;
         }
 
         void HookCallbacks(NetworkManager nm)
         {
-            if (_callbacksHooked) return;
-            _callbacksHooked = true;
+            if (_networkManager == nm) return;
+            UnhookCallbacks();
+            _networkManager = nm;
+            nm.OnClientConnectedCallback += HandleClientConnected;
+            nm.OnClientDisconnectCallback += HandleClientDisconnected;
+        }
 
-            nm.OnClientConnectedCallback += clientId =>
+        void UnhookCallbacks()
+        {
+            var nm = _networkManager;
+            _networkManager = null;
+            if (nm == null) return;
+            nm.OnClientConnectedCallback -= HandleClientConnected;
+            nm.OnClientDisconnectCallback -= HandleClientDisconnected;
+            if (nm.ConnectionApprovalCallback == Approve)
+                nm.ConnectionApprovalCallback = null;
+        }
+
+        void HandleClientConnected(ulong clientId)
+        {
+            var nm = _networkManager;
+            if (nm == null) return;
+            if (nm.IsServer)
             {
-                if (nm.IsServer)
-                {
-                    OnPlayersChanged?.Invoke();
-                }
-                else if (clientId == nm.LocalClientId)
-                {
-                    Status("Connected");
-                    OnConnected?.Invoke();
-                }
-            };
-            nm.OnClientDisconnectCallback += clientId =>
+                OnPlayersChanged?.Invoke();
+            }
+            else if (clientId == nm.LocalClientId)
             {
-                if (nm.IsServer)
-                {
-                    OnServerClientDisconnected(clientId);
-                }
-                else if (clientId == nm.LocalClientId)
-                {
-                    var reason = string.IsNullOrEmpty(nm.DisconnectReason) ? "connection lost" : nm.DisconnectReason;
-                    Status($"Disconnected: {reason}");
-                    OnDisconnected?.Invoke();
-                }
-            };
+                Status("Connected");
+                OnConnected?.Invoke();
+            }
+        }
+
+        void HandleClientDisconnected(ulong clientId)
+        {
+            var nm = _networkManager;
+            if (nm == null) return;
+            if (nm.IsServer)
+            {
+                OnServerClientDisconnected(clientId);
+            }
+            else if (clientId == nm.LocalClientId)
+            {
+                var reason = string.IsNullOrEmpty(nm.DisconnectReason) ? "connection lost" : nm.DisconnectReason;
+                Status($"Disconnected: {reason}");
+                OnDisconnected?.Invoke();
+            }
         }
 
         void Status(string message)
