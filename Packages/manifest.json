@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.immrsiv.quest-setup": "https://github.com/blacktheon/QuestBaseTemplate.git?path=Packages/com.immrsiv.quest-setup",
     "com.unity.ai.assistant": "2.13.0-pre.2",
     "com.unity.ai.navigation": "2.0.13",
     "com.unity.collab-proxy": "2.12.4",
