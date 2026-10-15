@@ -21,10 +21,7 @@ MonoBehaviour:
   - {fileID: 7238513354928289424}
   - {fileID: 7190974966952521763}
   - {fileID: 4009777061583627436}
-  - {fileID: 5846054902398818644}
   - {fileID: 4636274084881441160}
-  - {fileID: 7037148958812927697}
-  - {fileID: -569912512823115791}
   - {fileID: -6633122298135914736}
   - {fileID: -560152689139244421}
   - {fileID: 8124339580780095115}
@@ -34,23 +31,7 @@ MonoBehaviour:
   - {fileID: 4873911750083134590}
   - {fileID: -2040812552480457437}
   - {fileID: -5474288626964160347}
-  - {fileID: -6406812369410731403}
-  - {fileID: -5870040521081662245}
-  - {fileID: -1851786970905597512}
-  - {fileID: 5998342348350034543}
-  - {fileID: -8548966138404737637}
-  - {fileID: -7276824124225476153}
-  - {fileID: 802668466248922368}
-  - {fileID: 104164494594247065}
-  - {fileID: 2822405502231775275}
-  - {fileID: -8550290120700938976}
-  - {fileID: 5017682156482895933}
-  - {fileID: 6693596234589917822}
-  - {fileID: -6285249093506408445}
-  - {fileID: -5149616944071561008}
-  - {fileID: 6120613557581750023}
   - {fileID: 5174594401131320577}
-  - {fileID: -3430067294812229383}
   customLoaderName: 
   m_renderMode: 1
   m_latencyOptimization: 0
@@ -79,6 +60,7 @@ MonoBehaviour:
   m_Name: ViveEyeTracker Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.EyeTracker.ViveEyeTracker
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Eye Tracker (Beta)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.eye.tracker
@@ -88,6 +70,9 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  hasEyeTracker: 0
 --- !u!114 &-8800893490330301336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,6 +121,7 @@ MonoBehaviour:
   m_Name: ViveMockRuntime Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Feature.ViveMockRuntime
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR MockRuntime
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.mockruntime
@@ -160,6 +146,7 @@ MonoBehaviour:
   m_Name: ViveCompositionLayerPassthrough Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.CompositionLayer.Passthrough.ViveCompositionLayerPassthrough
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Composition Layer (Passthrough) (Deprecated)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.compositionlayer.passthrough
@@ -169,6 +156,13 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  passthroughIDList: 
+  m_HTCPassthroughExtensionEnabled: 1
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  m_XrSessionEnding: 0
+  m_XrSessionNewState: 0
+  m_XrSessionOldState: 0
 --- !u!114 &-8260735761406599619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +211,7 @@ MonoBehaviour:
   m_Name: ViveCompositionLayerCylinder Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.CompositionLayer.ViveCompositionLayerCylinder
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Composition Layer (Cylinder)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.compositionlayer.cylinder
@@ -226,6 +221,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_CylinderExtensionEnabled: 1
 --- !u!114 &-7874317748008121178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,6 +280,7 @@ MonoBehaviour:
   m_Name: ViveEyeTracker Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.EyeTracker.ViveEyeTracker
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Eye Tracker (Beta)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.eye.tracker
@@ -293,6 +290,9 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  hasEyeTracker: 0
 --- !u!114 &-7179545878512948108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,6 +306,7 @@ MonoBehaviour:
   m_Name: VivePassthrough Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Passthrough.VivePassthrough
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Passthrough
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.passthrough
@@ -315,6 +316,11 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  m_XrSessionEnding: 0
+  m_XrSessionNewState: 0
+  m_XrSessionOldState: 0
 --- !u!114 &-7091157552440694184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,6 +334,7 @@ MonoBehaviour:
   m_Name: ViveDisplayRefreshRate Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.DisplayRefreshRate.ViveDisplayRefreshRate
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Display Refresh Rate
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.displayrefreshrate
@@ -350,6 +357,7 @@ MonoBehaviour:
   m_Name: VivePathEnumeration Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.VivePathEnumeration
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Path Enumeration (Beta)
   version: 1.0.6
   featureIdInternal: vive.wave.openxr.feature.pathenumeration
@@ -359,6 +367,8 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
 --- !u!114 &-6688265301345785533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,6 +426,7 @@ MonoBehaviour:
   m_Name: HandTracking Android
   m_EditorClassIdentifier: Unity.XR.Hands::UnityEngine.XR.Hands.OpenXR.HandTracking
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: Hand Tracking Subsystem
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.input.handtracking
@@ -425,6 +436,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_ShouldBeRunning: 0
 --- !u!114 &-6472848733550740147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,6 +473,7 @@ MonoBehaviour:
   m_Name: VIVECosmosProfile Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.VIVECosmosProfile
   m_enabled: 1
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE Cosmos Controller Interaction
   version: 0.0.1
   featureIdInternal: vive.openxr.feature.cosmoscontroller
@@ -483,6 +496,7 @@ MonoBehaviour:
   m_Name: SceneUnderstanding_OpenXR_API Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.SceneUnderstanding.SceneUnderstanding_OpenXR_API
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Scene Understanding
   version: 0.0.1
   featureIdInternal: com.htc.openxr.sceneunderstanding.feature
@@ -508,6 +522,7 @@ MonoBehaviour:
   m_Name: ViveUserPresence Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.UserPresence.ViveUserPresence
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR User Presence
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.userpresence
@@ -517,6 +532,9 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  m_SupportUserPresence: 0
 --- !u!114 &-5870040521081662245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,6 +548,7 @@ MonoBehaviour:
   m_Name: VIVEFocus3Profile Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.VIVEFocus3Profile
   m_enabled: 1
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE Focus 3 Controller Interaction
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.focus3controller
@@ -539,6 +558,8 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
 --- !u!114 &-5523923901246652501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,6 +573,7 @@ MonoBehaviour:
   m_Name: ViveCompositionLayerPassthrough Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.CompositionLayer.Passthrough.ViveCompositionLayerPassthrough
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Composition Layer (Passthrough) (Deprecated)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.compositionlayer.passthrough
@@ -561,6 +583,13 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  passthroughIDList: 
+  m_HTCPassthroughExtensionEnabled: 1
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  m_XrSessionEnding: 0
+  m_XrSessionNewState: 0
+  m_XrSessionOldState: 0
 --- !u!114 &-5474288626964160347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -596,6 +625,7 @@ MonoBehaviour:
   m_Name: ViveEnterpriseCommand Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Enterprise.ViveEnterpriseCommand
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Enterprise Command
   version: 0.1
   featureIdInternal: vive.openxr.feature.enterprise.command
@@ -618,6 +648,7 @@ MonoBehaviour:
   m_Name: ViveHandTracking Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Hand.ViveHandTracking
   m_enabled: 1
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Hand Tracking
   version: 4.0.0
   featureIdInternal: vive.openxr.feature.hand.tracking
@@ -627,6 +658,15 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  hasReferenceSpaceLocal: 0
+  hasReferenceSpaceStage: 0
+  hasLeftHandTracker: 0
+  hasRightHandTracker: 0
+  lastUpdateFrameL: -1
+  lastUpdateFrameR: -1
+  updateFrame: -1
 --- !u!114 &-5217888340701232639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,6 +702,7 @@ MonoBehaviour:
   m_Name: ViveXRTracker Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Tracker.ViveXRTracker
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Tracker (Beta)
   version: 1.0.6
   featureIdInternal: vive.openxr.feature.xrtracker
@@ -671,6 +712,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
 --- !u!114 &-4958725553387950292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -728,6 +770,7 @@ MonoBehaviour:
   m_Name: MetaHandTrackingAim Android
   m_EditorClassIdentifier: Unity.XR.Hands::UnityEngine.XR.Hands.OpenXR.MetaHandTrackingAim
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: Meta Hand Tracking Aim
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.input.metahandtrackingaim
@@ -774,6 +817,7 @@ MonoBehaviour:
   m_Name: HandTracking Standalone
   m_EditorClassIdentifier: Unity.XR.Hands::UnityEngine.XR.Hands.OpenXR.HandTracking
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: Hand Tracking Subsystem
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.input.handtracking
@@ -783,6 +827,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_ShouldBeRunning: 0
 --- !u!114 &-3337166684305013778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -818,6 +863,7 @@ MonoBehaviour:
   m_Name: ViveFacialTracking Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.FacialTracking.ViveFacialTracking
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Facial Tracking
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.facial.tracking
@@ -827,6 +873,80 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  hasEyeTracker: 0
+  hasLipTracker: 0
+  eyeUpdateFrame: -1
+  lipUpdateFrame: -1
+  defExpressionData:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  s_EyeExpressionData:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  s_LipExpressionData:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!114 &-2916841066371288036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -840,6 +960,7 @@ MonoBehaviour:
   m_Name: VIVEFocus3Profile Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.VIVEFocus3Profile
   m_enabled: 1
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE Focus 3 Controller Interaction
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.focus3controller
@@ -849,6 +970,8 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
 --- !u!114 &-2351719962019669167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,6 +985,7 @@ MonoBehaviour:
   m_Name: ViveFirstPersonObserver Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.FirstPersonObserver.ViveFirstPersonObserver
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: XR MSFT First Person Observer
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.firstpersonobserver
@@ -871,6 +995,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  <XrInstanceCreated>k__BackingField: 0
 --- !u!114 &-2040812552480457437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -908,6 +1033,7 @@ MonoBehaviour:
   m_Name: ViveInteractions Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Interaction.ViveInteractions
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR - Interaction Group
   version: 2.5.0
   featureIdInternal: vive.openxr.feature.interactions
@@ -917,6 +1043,8 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
   m_ViveHandInteraction: 0
   m_ViveWristTracker: 0
   m_ViveXRTracker: 0
@@ -934,6 +1062,7 @@ MonoBehaviour:
   m_Name: VIVEFocus3Feature Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.VIVEFocus3Feature
   m_enabled: 1
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Support
   version: 1.0.0
   featureIdInternal: com.unity.openxr.feature.vivefocus3
@@ -978,6 +1107,7 @@ MonoBehaviour:
   m_Name: ViveXRTracker Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Tracker.ViveXRTracker
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Tracker (Beta)
   version: 1.0.6
   featureIdInternal: vive.openxr.feature.xrtracker
@@ -987,6 +1117,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
 --- !u!114 &-987257118286224347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1000,6 +1131,7 @@ MonoBehaviour:
   m_Name: ViveCompositionLayerEquirect Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.CompositionLayer.ViveCompositionLayerEquirect
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Composition Layer (Equirect)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.compositionlayer.equirect
@@ -1009,6 +1141,8 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_EquirectExtensionEnabled: 1
+  m_Equirect2ExtensionEnabled: 1
 --- !u!114 &-953854904059871563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1022,6 +1156,7 @@ MonoBehaviour:
   m_Name: ViveCompositionLayerExtraSettings Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.CompositionLayer.ViveCompositionLayerExtraSettings
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Composition Layer (Extra Settings) (Beta)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.compositionlayer.extrasettings
@@ -1035,6 +1170,9 @@ MonoBehaviour:
   supportSharpening: 0
   SettingsEditorSharpeningMode: 0
   SettingsEditorSharpeningLevel: 1
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  m_XrSessionEnding: 0
 --- !u!114 &-812357575710534255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1048,6 +1186,7 @@ MonoBehaviour:
   m_Name: ViveAnchor Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Feature.ViveAnchor
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Anchor (Beta)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.htcanchor
@@ -1058,6 +1197,9 @@ MonoBehaviour:
   required: 0
   customRuntimeLoaderName: 
   enablePersistedAnchor: 1
+  IsInited: 0
+  IsPAInited: 0
+  useFakeData: 0
 --- !u!114 &-569912512823115791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1071,6 +1213,7 @@ MonoBehaviour:
   m_Name: MetaHandTrackingAim Standalone
   m_EditorClassIdentifier: Unity.XR.Hands::UnityEngine.XR.Hands.OpenXR.MetaHandTrackingAim
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: Meta Hand Tracking Aim
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.input.metahandtrackingaim
@@ -1115,6 +1258,7 @@ MonoBehaviour:
   m_Name: MeshingTeapotFeature Android
   m_EditorClassIdentifier: HTC.VIVE.OPENXR.SceneUnderstandingSample::UnityEngine.XR.OpenXR.Samples.MeshingFeature.MeshingTeapotFeature
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: Meshing Subsystem
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.example.meshing
@@ -1140,6 +1284,7 @@ MonoBehaviour:
   m_Name: ViveHandInteractionExt Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Hand.ViveHandInteractionExt
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Hand Interaction Ext (Deprecated)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.hand.interaction.ext
@@ -1149,6 +1294,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1227,6 +1373,7 @@ MonoBehaviour:
   m_Name: ViveHandInteraction Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Hand.ViveHandInteraction
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Hand Interaction
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.hand.interaction
@@ -1236,6 +1383,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
 --- !u!114 &769933873262532847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1249,6 +1397,7 @@ MonoBehaviour:
   m_Name: ViveWristTracker Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Tracker.ViveWristTracker
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Wrist Tracker
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.tracker
@@ -1258,6 +1407,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
 --- !u!114 &802668466248922368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1271,6 +1421,7 @@ MonoBehaviour:
   m_Name: ViveFacialTracking Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.FacialTracking.ViveFacialTracking
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Facial Tracking
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.facial.tracking
@@ -1280,6 +1431,80 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  hasEyeTracker: 0
+  hasLipTracker: 0
+  eyeUpdateFrame: -1
+  lipUpdateFrame: -1
+  defExpressionData:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  s_EyeExpressionData:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  s_LipExpressionData:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!114 &1454881215214144642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1337,6 +1562,7 @@ MonoBehaviour:
   m_Name: ViveHandTracking Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Hand.ViveHandTracking
   m_enabled: 1
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Hand Tracking
   version: 4.0.0
   featureIdInternal: vive.openxr.feature.hand.tracking
@@ -1346,6 +1572,15 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  hasReferenceSpaceLocal: 0
+  hasReferenceSpaceStage: 0
+  hasLeftHandTracker: 0
+  hasRightHandTracker: 0
+  lastUpdateFrameL: 698
+  lastUpdateFrameR: 698
+  updateFrame: -1
 --- !u!114 &3277035825385037657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1432,6 +1667,7 @@ MonoBehaviour:
   m_Name: ViveSecondaryViewConfiguration Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.SecondaryViewConfiguration.ViveSecondaryViewConfiguration
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Spectator Camera (Beta)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.secondaryviewconfiguration
@@ -1443,6 +1679,16 @@ MonoBehaviour:
   customRuntimeLoaderName: 
   <IsAllowSpectatorCameraCapture360Image>k__BackingField: 0
   <IsEnableDebugLog>k__BackingField: 0
+  <XrInstanceCreated>k__BackingField: 0
+  <XrSessionCreated>k__BackingField: 0
+  <XrSessionStarted>k__BackingField: 0
+  <XrSessionNewState>k__BackingField: 0
+  <XrSessionOldState>k__BackingField: 0
+  _textureSize: {x: 0, y: 0}
+  _myTexture: {fileID: 0}
+  <IsEnabled>k__BackingField: 0
+  <IsStopped>k__BackingField: 0
+  <IsExistSpectatorCameraBased>k__BackingField: 0
 --- !u!114 &4009777061583627436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1522,6 +1768,7 @@ MonoBehaviour:
   m_Name: VivePassthrough Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Passthrough.VivePassthrough
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Passthrough
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.passthrough
@@ -1531,6 +1778,11 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  m_XrSessionEnding: 0
+  m_XrSessionNewState: 0
+  m_XrSessionOldState: 0
 --- !u!114 &5174594401131320577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1633,6 +1885,7 @@ MonoBehaviour:
   m_Name: VivePlaneDetection Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.PlaneDetection.VivePlaneDetection
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR PlaneDetection
   version: 1.0.0
   featureIdInternal: vive.wave.openxr.feature.planedetection
@@ -1642,6 +1895,8 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
 --- !u!114 &5846054902398818644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1655,6 +1910,7 @@ MonoBehaviour:
   m_Name: HTCViveTrackerProfile Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::UnityEngine.XR.OpenXR.Features.Interactions.HTCViveTrackerProfile
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: HTC VIVE Tracker Profile
   version: 0.0.1
   featureIdInternal: com.massive.openxr.feature.input.htcvivetracker
@@ -1677,6 +1933,7 @@ MonoBehaviour:
   m_Name: ViveCompositionLayer Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.CompositionLayer.ViveCompositionLayer
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Composition Layer
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.compositionlayer
@@ -1687,6 +1944,11 @@ MonoBehaviour:
   required: 0
   customRuntimeLoaderName: 
   enableAutoFallback: 0
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
+  m_XrSessionEnding: 0
+  m_XrSessionNewState: 0
+  m_XrSessionOldState: 0
 --- !u!114 &5951891364998059648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1722,6 +1984,7 @@ MonoBehaviour:
   m_Name: ViveAnchor Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Feature.ViveAnchor
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Anchor (Beta)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.htcanchor
@@ -1732,6 +1995,9 @@ MonoBehaviour:
   required: 0
   customRuntimeLoaderName: 
   enablePersistedAnchor: 1
+  IsInited: 0
+  IsPAInited: 0
+  useFakeData: 0
 --- !u!114 &6086119974523355590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1745,6 +2011,7 @@ MonoBehaviour:
   m_Name: ViveFrameSynchronization Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.FrameSynchronization.ViveFrameSynchronization
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Frame Synchronization (Beta)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.framesynchronization
@@ -1754,6 +2021,8 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
   m_SynchronizationMode: 1
 --- !u!114 &6120613557581750023
 MonoBehaviour:
@@ -1768,6 +2037,7 @@ MonoBehaviour:
   m_Name: ViveWristTracker Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Tracker.ViveWristTracker
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Wrist Tracker
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.tracker
@@ -1777,6 +2047,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
 --- !u!114 &6693596234589917822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1790,6 +2061,7 @@ MonoBehaviour:
   m_Name: VivePathEnumeration Standalone
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.VivePathEnumeration
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Path Enumeration (Beta)
   version: 1.0.6
   featureIdInternal: vive.wave.openxr.feature.pathenumeration
@@ -1799,6 +2071,8 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
 --- !u!114 &6875988687029518092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1856,6 +2130,7 @@ MonoBehaviour:
   m_Name: MeshingTeapotFeature Standalone
   m_EditorClassIdentifier: HTC.VIVE.OPENXR.SceneUnderstandingSample::UnityEngine.XR.OpenXR.Samples.MeshingFeature.MeshingTeapotFeature
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: Meshing Subsystem
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.example.meshing
@@ -1950,6 +2225,7 @@ MonoBehaviour:
   m_Name: ViveHandInteraction Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Hand.ViveHandInteraction
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Hand Interaction
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.hand.interaction
@@ -1959,6 +2235,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
 --- !u!114 &7408404698620313585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1972,6 +2249,7 @@ MonoBehaviour:
   m_Name: ViveFoveation Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.ViveFoveation
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Foveation
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.foveation
@@ -2003,8 +2281,6 @@ MonoBehaviour:
   - {fileID: -4888057035581998159}
   - {fileID: 7941082148751093752}
   - {fileID: -4958725553387950292}
-  - {fileID: -327684941885293512}
-  - {fileID: -4680514033055527498}
   - {fileID: 3277035825385037657}
   - {fileID: -7873904389257214564}
   - {fileID: -3337166684305013778}
@@ -2014,35 +2290,7 @@ MonoBehaviour:
   - {fileID: 8698189689720504656}
   - {fileID: -1247715843696689932}
   - {fileID: -3775670710096894345}
-  - {fileID: -2916841066371288036}
-  - {fileID: 8455166685329869763}
-  - {fileID: -812357575710534255}
-  - {fileID: 5859017325667269226}
-  - {fileID: 8332547637525099909}
-  - {fileID: -8260098751307391573}
-  - {fileID: -987257118286224347}
-  - {fileID: -953854904059871563}
-  - {fileID: -5523923901246652501}
-  - {fileID: -7091157552440694184}
-  - {fileID: -5442831187835550991}
-  - {fileID: -9005028382033939201}
-  - {fileID: -2995249253194644892}
-  - {fileID: 7408404698620313585}
-  - {fileID: 6086119974523355590}
-  - {fileID: 7355227687256204439}
-  - {fileID: -159573796981069855}
-  - {fileID: -5253431401040793060}
-  - {fileID: -7179545878512948108}
-  - {fileID: -6968016658743694818}
-  - {fileID: 5732006377714521633}
-  - {fileID: 3575347084089863962}
-  - {fileID: -1769221639232219937}
-  - {fileID: -1035934678499363036}
-  - {fileID: -6140471188433605274}
-  - {fileID: 769933873262532847}
-  - {fileID: -2351719962019669167}
   - {fileID: 5632659759299820759}
-  - {fileID: -6563923951354889762}
   customLoaderName: 
   m_renderMode: 1
   m_latencyOptimization: 0
@@ -2115,6 +2363,7 @@ MonoBehaviour:
   m_Name: ViveCompositionLayerColorScaleBias Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.CompositionLayer.ViveCompositionLayerColorScaleBias
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR Composition Layer (Color Scale Bias)
   version: 1.0.0
   featureIdInternal: vive.openxr.feature.compositionlayer.colorscalebias
@@ -2124,6 +2373,7 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_ColorScaleBiasExtensionEnabled: 1
 --- !u!114 &8455166685329869763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2137,6 +2387,7 @@ MonoBehaviour:
   m_Name: ViveInteractions Android
   m_EditorClassIdentifier: VIVE.OpenXR::VIVE.OpenXR.Interaction.ViveInteractions
   m_enabled: 0
+  <failedInitialization>k__BackingField: 0
   nameUi: VIVE XR - Interaction Group
   version: 2.5.0
   featureIdInternal: vive.openxr.feature.interactions
@@ -2146,6 +2397,8 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+  m_XrInstanceCreated: 0
+  m_XrSessionCreated: 0
   m_ViveHandInteraction: 0
   m_ViveWristTracker: 0
   m_ViveXRTracker: 0
