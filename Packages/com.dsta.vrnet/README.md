@@ -8,7 +8,7 @@ Built on Unity Netcode for GameObjects 2.x.
 
 Package Manager → Add package from git URL:
 
-    https://github.com/blacktheon/VRTrainingSystem.git?path=/Packages/com.dsta.vrnet#master
+    https://github.com/blacktheon/VRTrainingSystem.git?path=/Packages/com.dsta.vrnet#develop
 
 The branch suffix explicitly selects `master`, regardless of the repository's default
 branch. Unity records the resolved commit in `Packages/packages-lock.json`; it does
