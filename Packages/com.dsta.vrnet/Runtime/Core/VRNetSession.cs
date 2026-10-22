@@ -54,6 +54,8 @@ namespace DSTA.VRNet.Core
         public event Action OnDisconnected;
         public event Action OnStopped;
         public event Action OnDiscoveryTimeout;
+        /// <summary>A direct connection could not start, before NGO can report a disconnect.</summary>
+        public event Action OnClientStartFailed;
         public event Action OnPlayersChanged;
 
         DiscoveryBroadcaster _broadcaster;
@@ -252,13 +254,15 @@ namespace DSTA.VRNet.Core
             if (nm == null)
             {
                 Status("No NetworkManager is available");
+                OnClientStartFailed?.Invoke();
                 yield break;
             }
             UnhookCallbacks();
             if (nm.IsClient || nm.IsServer) nm.Shutdown();
             while (nm.ShutdownInProgress) yield return null;
-            ConnectNow(address, port);
+            bool started = ConnectNow(address, port);
             _clientRoutine = null;
+            if (!started) OnClientStartFailed?.Invoke();
         }
 
         bool ConnectNow(string address, int port)

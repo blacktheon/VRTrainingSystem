@@ -1,6 +1,6 @@
 {
   "name": "com.dsta.vrnet",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "VRNet Training Network",
   "description": "Multiplayer networking library for VR training: dedicated tablet server, team-scoped LAN discovery, avatar sync, auto-reconnect. Scenario control and session recording on the roadmap.",
   "unity": "6000.0",
@@ -9,5 +9,5 @@
   },
   "author": { "name": "DSTA" },
   "license": "UNLICENSED",
-  "repository": { "type": "git", "url": "https://github.com/LDRSG/VRTrainingSystem.git" }
+  "repository": { "type": "git", "url": "https://github.com/blacktheon/VRTrainingSystem.git" }
 }

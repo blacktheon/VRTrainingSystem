@@ -27,6 +27,7 @@ namespace DSTA.VRNet.Core
             };
             _session.OnDisconnected += ScheduleRetry;
             _session.OnDiscoveryTimeout += ScheduleRetry;
+            _session.OnClientStartFailed += ScheduleRetry;
         }
 
         /// <summary>Discard retries from the previous connection attempt or session.</summary>

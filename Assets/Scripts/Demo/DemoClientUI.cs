@@ -25,6 +25,7 @@ public class DemoClientUI : MonoBehaviour
         _session.OnConnected += Connected;
         _session.OnDisconnected += Disconnected;
         _session.OnDiscoveryTimeout += RetryInitialConnection;
+        _session.OnClientStartFailed += RetryInitialConnection;
         _session.OnStopped += CancelInitialRetry;
         if (!string.IsNullOrWhiteSpace(_playerName)) _session.PlayerName = _playerName.Trim();
         if (_manualIpField != null) _manualIpField.text = _serverAddress;
@@ -95,6 +96,7 @@ public class DemoClientUI : MonoBehaviour
         _session.OnConnected -= Connected;
         _session.OnDisconnected -= Disconnected;
         _session.OnDiscoveryTimeout -= RetryInitialConnection;
+        _session.OnClientStartFailed -= RetryInitialConnection;
         _session.OnStopped -= CancelInitialRetry;
     }
 }

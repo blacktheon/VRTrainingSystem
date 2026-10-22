@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text.RegularExpressions;
 using DSTA.VRNet.Avatar;
 using DSTA.VRNet.Core;
 using NUnit.Framework;
@@ -40,6 +41,58 @@ public class DemoNetworkIntegrationTests
         // Create captured scenario locals after the domain reload. Unity's EditMode
         // runner cannot restore compiler-generated closure objects across this yield.
         yield return RunLoopbackScenario();
+    }
+
+    [UnityTest]
+    public IEnumerator FailedDirectStart_NotifiesAndRetriesUntilStopped()
+    {
+        PrepareEditor();
+        yield return new EnterPlayMode();
+        yield return RunFailedStartScenario();
+    }
+
+    IEnumerator RunFailedStartScenario()
+    {
+        _managers = new List<NetworkManager>();
+        var core = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/VRNetCore.prefab"));
+        var manager = core.GetComponent<NetworkManager>();
+        var session = core.GetComponent<VRNetSession>();
+        _managers.Add(manager);
+        manager.SetSingleton();
+        int failures = 0;
+        session.OnClientStartFailed += () => failures++;
+        yield return null;
+        void ExpectInvalidAddress()
+        {
+            // NGO 2.4 logs endpoint parsing and hostname validation separately;
+            // newer supported Editors resolve NGO 2.13, which emits one message.
+            var netcodeVersion = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(UnityTransport).Assembly).version;
+            if (netcodeVersion == "2.4.0")
+            {
+                LogAssert.Expect(LogType.Error, new Regex("Invalid network endpoint:.*"));
+                LogAssert.Expect(LogType.Error, new Regex("Target server network address.*Fully Qualified Domain Name.*"));
+            }
+            else LogAssert.Expect(LogType.Error, new Regex("(Invalid server address:|Provided connection address).*"));
+            LogAssert.Expect(LogType.Error, new Regex(".*shutting down due to network transport start failure.*"));
+        }
+        ExpectInvalidAddress();
+        session.StartClient("not a valid address");
+        yield return Until(() => failures == 1, "initial failed-start notification");
+        Assert.That(session.GetComponent<ReconnectController>().Enabled, Is.False,
+            "The initial connection remains under the caller's control.");
+
+        // Reconnect is enabled by the first successful join. Exercise that same
+        // state with a real transport that cannot start, then stop a pending retry.
+        session.GetComponent<ReconnectController>().Enabled = true;
+        ExpectInvalidAddress();
+        ExpectInvalidAddress();
+        session.StartClient("not a valid address");
+        yield return Until(() => failures == 3, "automatic retry after a direct start failure");
+        session.StopSession();
+        yield return new WaitForSecondsRealtime(2.5f);
+        Assert.That(failures, Is.EqualTo(3), "Intentional stop must cancel pending retries.");
+        Assert.That(manager.IsListening, Is.False);
+        Assert.That(session.GetComponent<ReconnectController>().Enabled, Is.False);
     }
 
     IEnumerator RunLoopbackScenario()

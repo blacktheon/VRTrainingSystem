@@ -8,7 +8,13 @@ Built on Unity Netcode for GameObjects 2.x.
 
 Package Manager → Add package from git URL:
 
-    https://github.com/LDRSG/VRTrainingSystem.git?path=/Packages/com.dsta.vrnet#v0.1.0
+    https://github.com/blacktheon/VRTrainingSystem.git?path=/Packages/com.dsta.vrnet#master
+
+The branch suffix explicitly selects `master`, regardless of the repository's default
+branch. Unity records the resolved commit in `Packages/packages-lock.json`; it does
+not automatically pull new commits every time the Editor opens. After an upstream
+push, use Package Manager's Git update action (or add the same Git URL again), verify
+the resolved revision, and commit the consumer's updated lockfile.
 
 ## Integrate (5 steps)
 
@@ -28,6 +34,11 @@ Package Manager → Add package from git URL:
   player's avatar freezes for a grace period (config) and their identity survives rejoin.
   Direct-IP connections retain their address and port during retries; auto-join repeats
   discovery. `StopSession()` cancels retries and raises `OnStopped` after cleanup.
+- A direct connection that fails before NGO starts raises `OnClientStartFailed`.
+  ReconnectController handles this alongside disconnects after a successful join.
+  UI/adapters that retry the initial connection should subscribe to this event as
+  well as `OnDisconnected` and `OnDiscoveryTimeout`; stop scheduling when the user
+  intentionally stops the session. The sample client demonstrates this pattern.
 - Discovery and approval are team-scoped: a headset only finds and joins the server
   whose `teamId` matches its config. App version must match too.
 - `VRNetSession.Config` is a session-owned copy of the assigned `VRNetConfig`. The demo
