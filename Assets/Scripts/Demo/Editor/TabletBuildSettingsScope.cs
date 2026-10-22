@@ -235,7 +235,7 @@ public static class TabletBuildSettingsScope
             // BuildPipeline and SDK callbacks may have saved temporary asset values.
             // Restore the original bytes as well as the live objects, including dirty state.
             foreach (var file in files)
-                Attempt(() => { if (!File.Exists(file.Key) || !File.ReadAllBytes(file.Key).SequenceEqual(file.Value)) File.WriteAllBytes(file.Key, file.Value); });
+                Attempt(() => { if (!File.Exists(file.Key) || !File.ReadAllBytes(file.Key).SequenceEqual(file.Value)) DSTA.VRNet.Editor.BuildSettingsFiles.Restore(file.Key, file.Value); });
             if (errors.Count > 0) throw new AggregateException("Some pre-build project settings could not be restored.", errors);
         }
     }

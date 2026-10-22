@@ -44,6 +44,14 @@ the resolved revision, and commit the consumer's updated lockfile.
 - `VRNetSession.Config` is a session-owned copy of the assigned `VRNetConfig`. The demo
   tablet's team ID changes do not modify the source asset, including in the Editor.
 
+## Editor build settings
+
+Build tools that snapshot settings files can restore their bytes through
+`DSTA.VRNet.Editor.BuildSettingsFiles.Restore(path, originalBytes)`. It replaces the
+file atomically, avoiding Windows errors from truncating memory-mapped files, and
+removes its temporary file if replacement fails. Restore live Unity objects and
+their dirty state separately, as demonstrated by the tablet demo build scope.
+
 ## Deployment notes (Wi-Fi)
 
 Give each team its own 5 GHz SSID on a non-overlapping channel. The library tolerates
